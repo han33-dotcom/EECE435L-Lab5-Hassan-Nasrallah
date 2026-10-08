@@ -1,0 +1,65 @@
+(node:34376) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+Flask user app
+
+Root 01 Add user
+  POST http://127.0.0.1:5000/api/users/add [201 CREATED, 349B, 69ms]
+  Pass  HTTP 201
+  Pass  JSON response
+  Pass  Generated user ID
+  Pass  Created fields match
+
+Root 02 Get all users
+  GET http://127.0.0.1:5000/api/users [200 OK, 346B, 29ms]
+  Pass  HTTP 200
+  Pass  JSON response
+  Pass  Response is an array
+  Pass  Created user is listed
+
+Root 03 Get user by ID
+  GET http://127.0.0.1:5000/api/users/1 [200 OK, 344B, 8ms]
+  Pass  HTTP 200
+  Pass  JSON response
+  Pass  Requested ID returned
+  Pass  Original country
+
+Root 04 Update user
+  PUT http://127.0.0.1:5000/api/users/update [200 OK, 321B, 15ms]
+  Pass  HTTP 200
+  Pass  JSON response
+  Pass  Updated ID preserved
+  Pass  Updated fields match
+
+Root 05 Delete user
+  DELETE http://127.0.0.1:5000/api/users/delete/1 [200 OK, 237B, 17ms]
+  Pass  HTTP 200
+  Pass  JSON response
+  Pass  Deletion confirmed
+
+Root 06 Confirm deleted user is missing
+  GET http://127.0.0.1:5000/api/users/1 [404 NOT FOUND, 232B, 11ms]
+  Pass  HTTP 404
+  Pass  JSON response
+  Pass  User is absent
+
+-----------------------------------------------------------------
+|                         |         executed |           failed |
+--------------------------+------------------+-------------------
+|              iterations |                1 |                0 |
+--------------------------+------------------+-------------------
+|                requests |                6 |                0 |
+--------------------------+------------------+-------------------
+|            test-scripts |                6 |                0 |
+--------------------------+------------------+-------------------
+|      prerequest-scripts |                0 |                0 |
+--------------------------+------------------+-------------------
+|              assertions |               22 |                0 |
+-----------------------------------------------------------------
+| total run duration: 578ms                                     |
+-----------------------------------------------------------------
+| total data received: 625B (approx)                            |
+-----------------------------------------------------------------
+| average response time: 24ms [min: 8ms, max: 69ms, s.d.: 20ms] |
+-----------------------------------------------------------------

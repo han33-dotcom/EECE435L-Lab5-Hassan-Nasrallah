@@ -1,0 +1,5 @@
+*   b5fa639 (HEAD -> main, origin/main) Merge tested REST API into main
+|\  
+| * 5a8a262 (origin/codex/rest-api, codex/rest-api) Expose Flask CRUD API with JSON validation and tests
+|/  
+* bb9e296 Implement SQLite user database and CRUD operations

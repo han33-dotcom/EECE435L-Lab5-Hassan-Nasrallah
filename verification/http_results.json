@@ -1,0 +1,97 @@
+[
+  {
+    "name": "01 Add user",
+    "method": "POST",
+    "url": "http://127.0.0.1:5000/api/users/add",
+    "status": 201,
+    "request": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "067765434567",
+      "address": "John Doe Street, Innsbruck",
+      "country": "Austria"
+    },
+    "response": {
+      "address": "John Doe Street, Innsbruck",
+      "country": "Austria",
+      "email": "john.doe@example.com",
+      "name": "John Doe",
+      "phone": "067765434567",
+      "user_id": 1
+    }
+  },
+  {
+    "name": "02 Get all users",
+    "method": "GET",
+    "url": "http://127.0.0.1:5000/api/users",
+    "status": 200,
+    "request": null,
+    "response": [
+      {
+        "address": "John Doe Street, Innsbruck",
+        "country": "Austria",
+        "email": "john.doe@example.com",
+        "name": "John Doe",
+        "phone": "067765434567",
+        "user_id": 1
+      }
+    ]
+  },
+  {
+    "name": "03 Get user by ID",
+    "method": "GET",
+    "url": "http://127.0.0.1:5000/api/users/1",
+    "status": 200,
+    "request": null,
+    "response": {
+      "address": "John Doe Street, Innsbruck",
+      "country": "Austria",
+      "email": "john.doe@example.com",
+      "name": "John Doe",
+      "phone": "067765434567",
+      "user_id": 1
+    }
+  },
+  {
+    "name": "04 Update user",
+    "method": "PUT",
+    "url": "http://127.0.0.1:5000/api/users/update",
+    "status": 200,
+    "request": {
+      "address": "Beirut",
+      "country": "Lebanon",
+      "email": "john.doe@example.com",
+      "name": "John Doe",
+      "phone": "031234567",
+      "user_id": 1
+    },
+    "response": {
+      "address": "Beirut",
+      "country": "Lebanon",
+      "email": "john.doe@example.com",
+      "name": "John Doe",
+      "phone": "031234567",
+      "user_id": 1
+    }
+  },
+  {
+    "name": "05 Delete user",
+    "method": "DELETE",
+    "url": "http://127.0.0.1:5000/api/users/delete/1",
+    "status": 200,
+    "request": null,
+    "response": {
+      "status": "User deleted successfully"
+    }
+  },
+  {
+    "name": "06 Confirm deleted user is missing",
+    "method": "GET",
+    "url": "http://127.0.0.1:5000/api/users/1",
+    "status": 404,
+    "request": null,
+    "response": {
+      "error": "User not found"
+    }
+  }
+]

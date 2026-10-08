@@ -1,0 +1,504 @@
+{
+  "info": {
+    "_postman_id": "53fba5e7-8fe6-471e-87f9-9e7a5736f207",
+    "name": "Flask user app",
+    "description": "EECE435L Lab 5 - Hassan Nasrallah. Select the Flask local environment and run in numbered order. The POST response sets user_id for subsequent requests. Each request includes a saved response captured from the running Flask API. The final request verifies deletion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 Add user",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/add",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "add"
+          ]
+        },
+        "description": "01 Add user",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"067765434567\",\n  \"address\": \"John Doe Street, Innsbruck\",\n  \"country\": \"Austria\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "const user = pm.response.json();",
+              "pm.test(\"Generated user ID\", () => pm.expect(user.user_id).to.be.a(\"number\"));",
+              "pm.test(\"Created fields match\", () => { const sent = JSON.parse(pm.request.body.raw); Object.keys(sent).forEach(k => pm.expect(user[k]).to.eql(sent[k])); });",
+              "if (pm.response.code === 201) pm.environment.set(\"user_id\", user.user_id);"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "01 Add user successful response",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/add",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "add"
+              ]
+            },
+            "description": "01 Add user",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone\": \"067765434567\",\n  \"address\": \"John Doe Street, Innsbruck\",\n  \"country\": \"Austria\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "145"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"address\": \"John Doe Street, Innsbruck\",\n  \"country\": \"Austria\",\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"067765434567\",\n  \"user_id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "02 Get all users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        },
+        "description": "02 Get all users"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Response is an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));",
+              "pm.test(\"Created user is listed\", () => pm.expect(pm.response.json().some(u => u.user_id === Number(pm.environment.get(\"user_id\")))).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "02 Get all users successful response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "02 Get all users"
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "147"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n  {\n    \"address\": \"John Doe Street, Innsbruck\",\n    \"country\": \"Austria\",\n    \"email\": \"john.doe@example.com\",\n    \"name\": \"John Doe\",\n    \"phone\": \"067765434567\",\n    \"user_id\": 1\n  }\n]"
+        }
+      ]
+    },
+    {
+      "name": "03 Get user by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        },
+        "description": "03 Get user by ID"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Requested ID returned\", () => pm.expect(pm.response.json().user_id).to.eql(Number(pm.environment.get(\"user_id\"))));",
+              "pm.test(\"Original country\", () => pm.expect(pm.response.json().country).to.eql(\"Austria\"));"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "03 Get user by ID successful response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{user_id}}"
+              ]
+            },
+            "description": "03 Get user by ID"
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "145"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"address\": \"John Doe Street, Innsbruck\",\n  \"country\": \"Austria\",\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"067765434567\",\n  \"user_id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "04 Update user",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/update",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "update"
+          ]
+        },
+        "description": "04 Update user",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"address\": \"Beirut\",\n  \"country\": \"Lebanon\",\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"031234567\",\n  \"user_id\": {{user_id}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Updated ID preserved\", () => pm.expect(pm.response.json().user_id).to.eql(Number(pm.environment.get(\"user_id\"))));",
+              "pm.test(\"Updated fields match\", () => { const sent = JSON.parse(pm.variables.replaceIn(pm.request.body.raw)); Object.keys(sent).forEach(k => pm.expect(pm.response.json()[k]).to.eql(sent[k])); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "04 Update user successful response",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/update",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "update"
+              ]
+            },
+            "description": "04 Update user",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Beirut\",\n  \"country\": \"Lebanon\",\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"031234567\",\n  \"user_id\": {{user_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "122"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"address\": \"Beirut\",\n  \"country\": \"Lebanon\",\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\",\n  \"phone\": \"031234567\",\n  \"user_id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "05 Delete user",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users/delete/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "delete",
+            "{{user_id}}"
+          ]
+        },
+        "description": "05 Delete user"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"Deletion confirmed\", () => pm.expect(pm.response.json().status).to.eql(\"User deleted successfully\"));"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "05 Delete user successful response",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/delete/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "delete",
+                "{{user_id}}"
+              ]
+            },
+            "description": "05 Delete user"
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"User deleted successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "06 Confirm deleted user is missing",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        },
+        "description": "06 Confirm deleted user is missing"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              "pm.test(\"JSON response\", () => pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+              "pm.test(\"User is absent\", () => pm.expect(pm.response.json().error).to.eql(\"User not found\"));"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "06 Confirm deleted user is missing response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{user_id}}"
+              ]
+            },
+            "description": "06 Confirm deleted user is missing"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"User not found\"\n}"
+        }
+      ]
+    }
+  ]
+}
